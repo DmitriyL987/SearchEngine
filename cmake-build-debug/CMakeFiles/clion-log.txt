@@ -1,0 +1,15 @@
+"E:\Program Files\JetBrains\CLion 2021.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - MinGW Makefiles" E:\CLionProjects\search_engine
+CMake Warning (dev) at cmake-build-debug/_deps/googletest-src/googletest/CMakeLists.txt:22 (option):
+  Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
+  --help-policy CMP0077" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+  For compatibility with older versions of CMake, option is clearing the
+  normal variable 'gtest_disable_pthreads'.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Python: E:/MinGWw64/mingw64/bin/python3.9.exe (found version "3.9.10") found components: Interpreter 
+-- Using the multi-header code from E:/CLionProjects/search_engine/cmake-build-debug/_deps/json-src/include/
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/CLionProjects/search_engine/cmake-build-debug
