@@ -24,11 +24,10 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
-					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
-					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
+					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
+					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0/x86_64-w64-mingw32"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0/backward"/>
@@ -51,11 +50,10 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
-					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
-					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
+					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
+					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0/x86_64-w64-mingw32"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0/backward"/>
@@ -78,7 +76,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
@@ -105,7 +102,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
@@ -132,7 +128,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>
@@ -157,7 +152,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>
@@ -182,7 +176,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>
@@ -207,7 +200,6 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include"/>
 					<Add directory="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest"/>
 					<Add directory="E:/MinGWw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include/c++/11.2.0"/>

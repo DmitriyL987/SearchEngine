@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
-project(search_engine)
+project(search_engine VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
+add_executable(search_engine main.cpp converterJSON.h converterJSON.cpp InvertedIndex.hpp)
 include(FetchContent)
-
-add_executable(search_engine main.cpp converterJSON.h converterJSON.cpp)
 
 FetchContent_Declare(
         googletest
@@ -21,6 +20,7 @@ include(GoogleTest)
 gtest_discover_tests(search_engine)
 
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+
 FetchContent_MakeAvailable(json)
 
 target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json)

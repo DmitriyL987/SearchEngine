@@ -15,7 +15,6 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/include"
   "_deps/json-src/include"
   "_deps/googletest-src/googletest/include"
   "_deps/googletest-src/googletest"

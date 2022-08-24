@@ -22,7 +22,6 @@ ConverterJSON::ConverterJSON() {
     }
 }
 
-
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
     std::vector<std::string> textList;
     json::iterator it = config.find("files");
@@ -51,9 +50,34 @@ std::vector<std::string> ConverterJSON::GetRequests() {
 }
 
 void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
-    std::ofstream fileAnswer("answers.json", std::ios_base::trunc);
+    std::ofstream fileAnswer("answers.json");
     if(fileAnswer.is_open()){
-
-    }
+        json answerJSON;
+        if(!answers.empty()) {
+            int xxx = answers.size();
+            answerJSON.value("answers", ""); //создание ключа "answers":
+            for(int el = 0; el < answers.size(); ++el){
+                //создание ключа "requests_XXX":
+                std::string prefix;
+                prefix.resize(3 - std::to_string(el + 1).size());
+                std::fill(prefix.begin(), prefix.end(), '0');
+                std::string keyRequests = "requests" + prefix + std::to_string(el + 1);
+                answerJSON["answers"].value(keyRequests, "");
+                if (!answers.empty()) answerJSON[keyRequests].value("result", "true");
+                else answerJSON[keyRequests].value("result", "false");
+                if(answers[el].size() > 1) {
+                    answerJSON[keyRequests].value("relevance", "");
+                    for(int i = 0; i < answers[el].size(); ++i) {
+                        answerJSON[keyRequests]["relevance"].value("docid", answers[el][i].first);
+                        answerJSON[keyRequests]["relevance"].value("rank", answers[el][i].second);
+                    }
+                } else {
+                    answerJSON[keyRequests].value("docid", answers[el][0].first);
+                    answerJSON[keyRequests].value("rank", answers[el][0].second);
+                }
+            }
+        }
+        fileAnswer << answerJSON;
+        fileAnswer.close();
+    }else std::cerr << "failed to open/create file \"answers.json\"" << std::endl;
 }
-
