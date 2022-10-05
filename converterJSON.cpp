@@ -4,37 +4,83 @@
 
 #include "converterJSON.h"
 
-ConverterJSON::ConverterJSON() {
-    std::cout << "Start..." << std::endl;
+//json ConverterJSON::config;
+//std::string ConverterJSON::name;
+//std::string ConverterJSON::version;
+//int ConverterJSON::responsesLimit;
+//int ConverterJSON::indexUpdate;
+
+//-------------------------------
+
+void ConverterJSON::init() {
     std::ifstream configFile ("..\\config.json");
     if(!configFile.is_open()) {
         std::cerr << "config file is missing" << std::endl;
-        error = true;
+
     } else {
         std::cout << "the configuration file has been opened successfully" << std::endl;
+        json config;
         configFile >> config;
-        configFile.close();
-        json::iterator cf = config.find("config");
+
         if (!config.contains("config")) {
             std::cerr << "config file is empty" << std::endl;
-            error = true;
+        } else{
+            std::cout<< "config is founded!" << std::endl;
+            responsesLimit = config["config"]["max_responses"];
+            indexUpdate = config["config"]["update"];
+            name = config["config"]["name"];
+            version = config["config"]["version"];
         }
+        configFile.close();
     }
+    std::cout<< "init - ok!" << std::endl;
 }
+//-------------------------------
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
-    std::vector<std::string> textList;
-    json::iterator it = config.find("files");
-    for(int i = 0; i < it->size();++i){
-        textList.emplace_back((*it)[i]);
-    }
-    return textList;
+    std::ifstream configFile("..\\config.json");
+    if(configFile.is_open()) {
+        json config;
+        configFile >> config;
+        configFile.close();
+        std::vector<std::string> textList;
+        listDocuments.clear();
+        json::iterator it = config.find("files");
+        for (int i = 0; i < it->size(); ++i) {
+            listDocuments.emplace_back((*it)[i]);
+        }
+        for(int i = 0; i < listDocuments.size(); ++i){
+            std::ifstream file(listDocuments[i], std::ios::ate);
+            std::cout << "file name: " << listDocuments[i] << "\n";
+            if(file.is_open()){
+                auto szFile = file.tellg();
+                std::string str(szFile, '\0');
+                file.seekg(0);
+                file.read(&str[0], szFile);
+                textList.emplace_back(str);
+                file.close();
+            } else {
+                std::cerr << "Ошибка открытия файла" << std::endl;
+            }
+        }
+        std::cout << "ok!" << "\n";
+        std::cout << textList[1] << std::endl;
+        return textList;
+    }else return std::vector<std::string>();
 }
+//------------------------------
 
 int ConverterJSON::GetResponsesLimit() {
-    json::iterator it = config.find("config");
-    return (*it)["max_responses"];
+    std::ifstream configFile("..\\config.json");
+    if(configFile.is_open()) {
+        json config;
+        configFile >> config;
+        configFile.close();
+        json::iterator it = config.find("config");
+        return (*it)["max_responses"];
+    } else return -1;
 }
+//-------------------------------
 
 std::vector<std::string> ConverterJSON::GetRequests() {
     std::vector<std::string> requests;
@@ -43,14 +89,15 @@ std::vector<std::string> ConverterJSON::GetRequests() {
         json j;
         req >> j;
         req.close();
-        json::iterator it = j.find("files");
-        for (int i = 0; i < it->size(); ++i) requests.emplace_back((*it)[i]);
+        requests = j.get<std::vector<std::string>>();
         return requests;
-    } else return std::vector<std::string>();
+
+    } else return requests;
 }
+//-------------------------------
 
 void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
-    std::ofstream fileAnswer("answers.json");
+    std::ofstream fileAnswer("..\\answers.json");
     if(fileAnswer.is_open()){
         json answerJSON;
         if(!answers.empty()) {
@@ -61,7 +108,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
                 std::string prefix;
                 prefix.resize(3 - std::to_string(el + 1).size());
                 std::fill(prefix.begin(), prefix.end(), '0');
-                std::string keyRequests = "requests" + prefix + std::to_string(el + 1);
+                std::string keyRequests = "requests" + prefix + std::to_string(el+1);
                 answerJSON["answers"].value(keyRequests, "");
                 if (!answers.empty()) answerJSON[keyRequests].value("result", "true");
                 else answerJSON[keyRequests].value("result", "false");
@@ -79,5 +126,5 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
         }
         fileAnswer << answerJSON;
         fileAnswer.close();
-    }else std::cerr << "failed to open/create file \"answers.json\"" << std::endl;
+    }else std::cerr << "failed to open/create file \"..\\answers.json\"" << std::endl;
 }

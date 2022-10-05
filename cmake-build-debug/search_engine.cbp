@@ -362,6 +362,9 @@
 		<Unit filename="E:/CLionProjects/search_engine/main.cpp">
 			<Option target="search_engine"/>
 		</Unit>
+		<Unit filename="E:/CLionProjects/search_engine/searchEngine.hpp">
+			<Option target="search_engine"/>
+		</Unit>
 		<Unit filename="E:/CLionProjects/search_engine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

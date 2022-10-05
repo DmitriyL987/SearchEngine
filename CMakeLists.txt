@@ -3,7 +3,7 @@ project(search_engine VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(search_engine main.cpp converterJSON.h converterJSON.cpp InvertedIndex.hpp)
+add_executable(search_engine main.cpp converterJSON.h converterJSON.cpp InvertedIndex.hpp searchEngine.hpp)
 include(FetchContent)
 
 FetchContent_Declare(

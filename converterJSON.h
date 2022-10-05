@@ -2,8 +2,7 @@
 // Created by LDm on 21.08.2022.
 //
 
-#ifndef SEARCH_ENGINE_CONVERTERJSON_H
-#define SEARCH_ENGINE_CONVERTERJSON_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +25,11 @@ class ConverterJSON {
     std::vector<std::string> requests;
     std::vector<std::vector<std::pair<int, float>>> answers;
 public:
-    ConverterJSON() ;
+    ConverterJSON(){
+        init();
+    }
+
+    void init();
 
     std::vector<std::string> GetTextDocuments();
 
@@ -35,9 +38,4 @@ public:
     std::vector<std::string> GetRequests();
 
     void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
-
-    bool error = false;
 };
-
-
-#endif //SEARCH_ENGINE_CONVERTERJSON_H
