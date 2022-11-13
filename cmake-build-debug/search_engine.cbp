@@ -338,9 +338,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="E:/CLionProjects/search_engine/InvertedIndex.hpp">
-			<Option target="search_engine"/>
-		</Unit>
 		<Unit filename="E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googlemock/src/gmock-all.cc">
 			<Option target="gmock"/>
 		</Unit>
@@ -359,10 +356,10 @@
 		<Unit filename="E:/CLionProjects/search_engine/converterJSON.h">
 			<Option target="search_engine"/>
 		</Unit>
-		<Unit filename="E:/CLionProjects/search_engine/main.cpp">
+		<Unit filename="E:/CLionProjects/search_engine/invertedIndex.hpp">
 			<Option target="search_engine"/>
 		</Unit>
-		<Unit filename="E:/CLionProjects/search_engine/searchEngine.hpp">
+		<Unit filename="E:/CLionProjects/search_engine/main.cpp">
 			<Option target="search_engine"/>
 		</Unit>
 		<Unit filename="E:/CLionProjects/search_engine/CMakeLists.txt">

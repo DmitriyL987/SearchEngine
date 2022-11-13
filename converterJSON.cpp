@@ -51,7 +51,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
         }
         for(int i = 0; i < listDocuments.size(); ++i){
             std::ifstream file(listDocuments[i], std::ios::ate);
-            std::cout << "file name: " << listDocuments[i] << "\n";
+            //std::cout << "file name: " << listDocuments[i] << "\n";
             if(file.is_open()){
                 auto szFile = file.tellg();
                 std::string str(szFile, '\0');
@@ -63,8 +63,8 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
                 std::cerr << "Ошибка открытия файла" << std::endl;
             }
         }
-        std::cout << "ok!" << "\n";
-        std::cout << textList[1] << std::endl;
+        std::cout << "get text - ok!" << "\n";
+        //std::cout << textList[1] << std::endl;
         return textList;
     }else return std::vector<std::string>();
 }
@@ -103,7 +103,8 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
         if(!answers.empty()) {
             int xxx = answers.size();
             answerJSON.value("answers", ""); //создание ключа "answers":
-            for(int el = 0; el < answers.size(); ++el){
+            int countResponse = GetResponsesLimit();
+            for(int el = 0; el < (answers.size() > countResponse ? countResponse : answers.size()); ++el){
                 //создание ключа "requests_XXX":
                 std::string prefix;
                 prefix.resize(3 - std::to_string(el + 1).size());
