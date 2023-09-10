@@ -1,28 +1,29 @@
-#include <thread>
-#include <mutex>
-#include <gtest/gtest.h>
-//#include "converterJSON.h"
-//#include "invertedIndex.hpp"
+
+//#include <gtest/gtest.h>
+#include "converterJSON.h"
+#include "invertedIndex.hpp"
 #include <chrono>
-
+#include <iostream>
 #include "searchEngine.hpp"
+#include <vector>
 
-TEST(sample_test_case, sample_test)
-{
-    EXPECT_EQ(1, 1);
-}
+//TEST(sample_test_case, sample_test)
+//{
+//    EXPECT_EQ(1, 1);
+//}
 
 
 std::mutex mutex;
 
 void checkConditionExit(bool&);
 
+void test(std::vector<std::vector<std::pair<int, float>>> preAnswer);
+
 int main() {
-    ConverterJSON Converter;
+    ConverterJSON converter;
     invertedIndex inverter;
     std::vector<std::string> texts;
-    texts = Converter.GetTextDocuments();
-
+    texts = converter.GetTextDocuments();
 
 //    bool noExit = true;
 //    auto *check = new std::thread(checkConditionExit, std::ref(noExit));
@@ -35,26 +36,33 @@ int main() {
 
 
 //---------------- тест --------------------------------------------------------
-    std::cout << "main thread id: " << std::this_thread::get_id() << std::endl;
+    //std::cout << "main thread id: " << std::this_thread::get_id() << std::endl;
 
     inverter.UpdateDocumentBase(texts);
+    std::vector<std::string> a = converter.GetRequests();
+    //std::vector<std::vector<std::string>> words;
 
-    std::vector<std::vector<std::string>> words;
+    std::vector<std::vector<RelativeIndex>> tmp;
+    SearchServer server (inverter);
+    std::cout << "creat object SearchServer\n";
 
-    for(int i = 0; i<texts.size(); ++i) words.emplace_back(inverter.separationWord(texts[i]));
 
-    for(auto it_vec : inverter.getDictionary()){
-        std::cout << "WORD: " << it_vec.first << "\n\t\t{ ";
-        for(int i = 0; i < it_vec.second.size(); ++i)
-        {
-            std::cout << " {"<< it_vec.second[i].doc_id << ", "
-                      << it_vec.second[i].count << "} ";
+    //std::this_thread::sleep_for(std::chrono::seconds(1));
+    tmp = server.search(a);
+    std::cout << "return RelativIndex\n";
+    std::vector<std::vector<std::pair<int, float>>> preAnswer;
+    for(int i = 0;i < tmp.size(); ++i){
+        for( int j = 0; j < tmp[i].size(); ++j){
+            preAnswer[i][j].first = tmp[i][j].doc_id;
+            preAnswer[i][j].second = tmp[i][j].rank;
         }
-        std::cout << " };"<< std::endl;
     }
+    test( preAnswer);
+    converter.putAnswers(preAnswer);
 
     return 0;
 }
+
 //--------------------------------------
 void checkConditionExit(bool& cond){
     std::string str;
@@ -66,5 +74,13 @@ void checkConditionExit(bool& cond){
         mutex.lock();
         cond = false;
         mutex.unlock();
+    }
+}
+
+void  test(std::vector<std::vector<std::pair<int, float>>> preAnswer){
+    for(int i = 0;i < preAnswer.size(); ++i){
+        for( int j = 0; j < preAnswer[i].size(); ++j){
+            std::cout << "doc_id = " << preAnswer[i][j].first << " : Rank = " << preAnswer[i][j].second << std::endl;
+        }
     }
 }

@@ -2,10 +2,4 @@ detailed description
   qt provides four classes for handling image data: qimage, qpixmap, qbitmap and qpicture. qimage is designed and optimized for i/o, and for direct pixel access and manipulation, while qpixmap is designed and optimized for showing images on screen. qbitmap is only a convenience class that inherits qpixmap, ensuring a depth of 1. finally, the qpicture class is a paint device that records and replays qpainter commands.
 because qimage is a qpaintdevice subclass, qpainter can be used to draw directly onto images. when using qpainter on a qimage, the painting can be performed in another thread than the current gui thread.
 the qimage class supports several image formats described by the format enum. these include monochrome, 8-bit, 32-bit and alpha-blended images which are available in all versions of qt 4.x.
-qimage provides a collection of functions that can be used to obtain a variety of information about the image. there are also several functions that enables transformation of the image.
-qimage objects can be passed around by value since the qimage class uses implicit data sharing. qimage objects can also be streamed and compared.
-note: if you would like to load qimage objects in a static build of qt, refer to the plugin howto.
-warning: painting on a qimage with the format qimage::format_indexed8 is not supported.
-reading and writing image files
-qimage provides several ways of loading an image file: the file can be loaded when constructing the qimage object, or by using the load() or loadfromdata() functions later on. qimage also provides the static fromdata() function, constructing a qimage from the given data. when loading an image, the file name can either refer to an actual file on disk or to one of the application's embedded resources. see the qt resource system overview for details on how to embed images and other resource files in the application's executable.
-simply call the save() function to save a qimage object.
+qimage provides a collection of functions that can be used to obtain a variety of information about the image. animals car airplane animals animals

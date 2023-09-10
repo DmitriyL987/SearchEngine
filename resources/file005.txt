@@ -1,6 +1,3 @@
 detailed description
-qfile is an i/o device for reading and writing text and binary files and resources. a qfile may be used by itself or, more conveniently, with a qtextstream or qdatastream.
-the file name is usually passed in the constructor, but it can be set at any time using setfilename(). qfile expects the file separator to be '/' regardless of operating system. the use of other separators (e.g., '\') is not supported.
-you can check for a file's existence using exists(), and remove a file using remove(). (more advanced file system related operations are provided by qfileinfo and qdir.)
-the file is opened with open(), closed with close(), and flushed with flush(). data is usually read and written using qdatastream or qtextstream, but you can also call the qiodevice-inherited functions read(), readline(), readall(), write(). qfile also inherits getchar(), putchar(), and ungetchar(), which work one character at a time.
-the size of the file is returned by size(). you can get the current file position using pos(), or move to a new file position using seek(). if you've reached the end of the file, atend() returns true.
+qfile is an i/o device for reading and writing text and binary files and resources. if you've reached the end of the file, atend() returns true.
+паровоз horse dog horse dog horse dog horse horse//horse/horse/horse*horse
