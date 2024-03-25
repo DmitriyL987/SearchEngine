@@ -3,6 +3,7 @@
 #include "converterJSON.h"
 #include "invertedIndex.hpp"
 
+
 struct RelativeIndex{
     size_t doc_id;
     float rank;
@@ -11,8 +12,7 @@ struct RelativeIndex{
     }
 };
 
-
-
+//---------------------
 class SearchServer
 {
 public:
@@ -23,25 +23,21 @@ public:
 private:
     invertedIndex _index;
 
-    std::vector<std::vector<std::string>> orderedWordsList(std::vector<std::vector<std::string>>& requestList);
-
-    //std::pair<std::string, std::vector<Entry>> findRarestWord(std::vector<std::string>& _list);
+    std::vector<std::string> U_WordList (std::vector<std::string>& wordList);
 
     std::vector<RelativeIndex> getRank(std::vector<std::string> &_list);
 
     void sortRelativeVector(std::vector<RelativeIndex> &vec);
 
     std::vector<std::string> findRarestWord_2(std::vector<std::string>& _list);
-
 };
 
-//----
+//-------------------------------------------------------------
 std::vector<std::vector<RelativeIndex>> SearchServer::search (const std::vector<std::string>& queries_input)
 {
     std::vector<std::string> tmp ;
     tmp.clear();
     // разбили запросы по отдельным словам
-    std::cout << "begin separation...\n";
     std::vector<std::vector<std::string>> fragmentedRequest;
 
     for (size_t i = 0; i < queries_input.size(); ++i){
@@ -49,194 +45,183 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (const std::vector<
         _index.separationWord(str, tmp);
         fragmentedRequest.emplace_back(tmp);
     }
-    std::cout << "fragmentedRequest - OK\n" << fragmentedRequest.size() << "\n";
 
     //формирует списки уникальных слов uniqueWordsList из fragmentedRequest
-    std::vector<std::vector<std::string>> uniqueWordsList(fragmentedRequest.size());
+    std::vector<std::vector<std::string>> uniqueWordsList;
 
     for(size_t i = 0; i < fragmentedRequest.size(); ++i)
-    {
-        //std::cout << "uniqueWordsList.size() = " << uniqueWordsList.size() << "\n";
-        //uniqueWordsList[i].resize(fragmentedRequest[i].size());
-
-        for(size_t j = 0; j < fragmentedRequest[i].size(); ++j) {
-            auto it = std::find(uniqueWordsList[i].begin(), uniqueWordsList[i].end(),
-                                fragmentedRequest[i][j]);
-
-            if(it == uniqueWordsList[i].end()) {
-                std::cout << "In cycle  " << i << "  " << j << "  " << fragmentedRequest[i][j] << std::endl;
-
-                uniqueWordsList[i].emplace_back(fragmentedRequest[i][j]);
-            }
-        }
-    }
-    std::cout << "разбили запросы по отдельным словам, формирует списки уникальных слов uniqueWordsList из queries_input\n";
-    std::cout << "uniqueWordsList.size() = " << uniqueWordsList.size() << "\n";
-   // std::vector<std::pair<std::string, std::vector<Entry>>> rarestWordList;
-
+        uniqueWordsList.emplace_back(U_WordList(fragmentedRequest[i]));
 
     //упорядоченный список слов по частоте встречаемости в словаре
     std::vector<std::vector<std::string>> orderedWordList(uniqueWordsList.size());
+    orderedWordList.clear();
 
     for(size_t i = 0; i < uniqueWordsList.size(); ++i)
         orderedWordList.emplace_back(findRarestWord_2(uniqueWordsList[i]));
-    std::cout << "упорядоченный список слов по частоте встречаемости в словаре\n";
 
     std::vector<std::vector<RelativeIndex>> relativeIndex;
-    for(size_t i; i < orderedWordList.size(); ++i)
+    relativeIndex.clear();
+
+    for(size_t i = 0; i < orderedWordList.size(); ++i)
         relativeIndex.emplace_back( getRank(orderedWordList[i]));
-    std::cout << "возвращаем вектор RelativIndex\n";
     return relativeIndex;
 }
-//---------------------------------
-//Упорядочивание списка слов
-std::vector<std::vector<std::string>> SearchServer::orderedWordsList(std::vector<std::vector<std::string>>& requestList){
-    size_t min = 0;
-    size_t ind = 0;
-    std::vector<bool> have_in_docs;
-    std::vector<std::vector<std::string>> result;
-
-    for (size_t i = 0; i < requestList.size(); ++i)
-    {
-        for(size_t j = 0; j < requestList[i].size(); ++j)
-        {
-            std::vector<Entry> vectorWord = _index.getDictionary().find(requestList[i][j])->second;
-            std::map<size_t, size_t> orderWord;
-            if(vectorWord.empty()) {
-                have_in_docs[i] =  false;
-                continue;
-            } else {
-                have_in_docs[i] = true;
-                for(size_t k = 0; k < vectorWord.size(); ++k){
-                    if(vectorWord[k].count && orderWord[k])
-                        orderWord.emplace(std::make_pair(vectorWord[k].count, vectorWord[k].doc_id));// не годится
-                }
-            }
-
-            if(!orderWord.empty()){
-                for(auto it : orderWord){
-
-                }
-            }
-        }
-        if(!have_in_docs[i]){}
-    }
-    return result;
-}
-
 //------------------------------------------
-//возвращает вектор слов отсортированный по частоте встречаемости в порядке возрастания в словаре
+
+//возвращает вектор уникальных слов отсортированный по частоте встречаемости в словаре по возрастанию
 std::vector<std::string>  SearchServer::findRarestWord_2(std::vector<std::string>& _list){
     std::map <size_t, std::string> map;
+    std::map<std::string, std::vector<Entry>> freq_dictionary_Req = _index.listToFreqDict(_list);
+    std::map<std::string, std::vector<Entry>>::iterator word;
+    std::vector<std::string> orderedWord;
 
-    for(size_t i = 0; i < _list.size(); ++i)
-    {
-        auto it = _index.getDictionary().find(_list[i]);
-        if(it != _index.getDictionary().end())
-        {
-            size_t sumFieldCount = 0;
-            for (auto el : it->second) { sumFieldCount += el.count; } // сколько раз слово встречается во всех текстах
-            //заполняем мапу
-            if(map.find(sumFieldCount) == map.end()) map.emplace(std::make_pair(sumFieldCount, it->first)) ;
-            else {
-                while(map.find(sumFieldCount) != map.end())
-                {
-                    ++sumFieldCount;
-                }
-                map.emplace(std::make_pair(sumFieldCount, it->first));
-            }
-        }
+/// проверка
+//    for(auto &it : freq_dictionary_Req){
+//        std::cout << it.first << " :\n";
+//       for(auto el : it.second)
+//           std::cout << "\tdoc_ID : " << el.doc_id << "\t | Count : " << el.count << "\n";
+//   }
+
+// суммирует count по вектору Entry для поиска редкого слова
+    auto sumCount = [&freq_dictionary_Req](const std::string &str){
+        size_t summ = 0;
+        auto it = freq_dictionary_Req.find(str);
+        for(auto elem : it->second) summ += elem.count;
+        return summ;
+    };
+    for(const auto& it : freq_dictionary_Req){
+        size_t summ = sumCount(it.first);
+        if(summ != 0 && (map.count(summ) == 0)) map.insert({summ, it.first});
     }
-    std::vector<std::string> orderWord(map.size());
-    for(const auto& iter : map){
-        orderWord.emplace_back(iter.second) ;
-    }
-    return orderWord;
+    if(!map.empty()) // вектор сортирован в порядке от самых редко встречаемых к часто встречаемым
+            for (const auto& it : map) orderedWord.push_back(it.second);
+
+    std::cout << std::endl;
+    return orderedWord;
 }
-
-
-//--------------------------------------------!!!
-//std::vector<RelativeIndex> SearchServer::getRank(std::vector<std::string>& _list, std::vector<size_t>& docList){
-//    if(docList.empty()) return  std::vector<RelativeIndex>();
-//    std::vector <std::vector<size_t>> rankTableAbs(_list.size());
-//    for(size_t i = 0; i < docList.size(); ++i){
-//        for(size_t j = 0; j < _list.size(); ++j){
-//            auto it = _index.getDictionary().find(_list[i]);
-//            for( size_t k = 0; k < docList.size(); ++k) {
-//                if(docList[i] == it->second[k].doc_id) {
-//                    rankTableAbs[i][k] = it->second[j].count;
-//                }
-//            }
-//        }
-//    }
-//    std::vector <size_t> rankAbs;
-//    size_t maxRank = 0;
-//    for(size_t i = 0; i < rankTableAbs.size(); ++i){
-//        for(size_t j = 0; j < rankTableAbs[i].size(); ++j){
-//            rankAbs[i] += rankTableAbs[i][j];
-//            if(maxRank < rankAbs[i]) maxRank = rankAbs[i];
-//        }
-//    }
-//    std::vector<RelativeIndex> relativeIndex;
-//    for(int i = 0; i < rankAbs.size(); ++i){
-//        relativeIndex[i].rank = rankAbs[i]/maxRank;
-//        relativeIndex[i].doc_id = docList[i];
-//    }
-//    sortRelativeVector(relativeIndex);
-//    return relativeIndex;
-//}
 
 //-------------------------------------------
 std::vector<RelativeIndex> SearchServer::getRank(std::vector<std::string> &_list){
-
-    if(_list.empty()) {
-        std::cout<< "getRank: список пуст!\n";
-        return std::vector<RelativeIndex>();
-    }
-
-    std::vector<RelativeIndex> relativeIndex;
-
-    std::vector<size_t> docList(_list.size());
+    if(_list.empty()) return {};
+    std::map<std::string, std::vector<Entry>> dict = _index.listToFreqDict(_list);//
+    std::map<std::string, std::vector<Entry>> d_Request; //структура для хранения слов выборки
+    std::vector<size_t> docList;
     std::vector<size_t> rankTableAbs;
+    std::vector<std::string> wordList;
+    std::vector <float> relativeRanks;
+    std::vector <size_t> absoluteRanks;
+    std::map<std::string, std::vector<Entry>>::iterator it;
 
-    auto it = _index.getDictionary().find(_list[0]);
-    if(it != _index.getDictionary().end()) {
+
+    //реализация п.4 методички
+    //  первое самое редкое слово находим в словаре
+    it = dict.find(_list[0]);
+    if(it != dict.end()) {
         for (size_t k = 0; k < it->second.size(); ++k) {
-            docList.emplace_back(it->second[k].doc_id);
-            rankTableAbs.emplace_back(it->second[k].count);
+            if(it->second[k].count != 0) {
+                docList.push_back(it->second[k].doc_id);
+                rankTableAbs.push_back(it->second[k].count);
+            }
+        }
+    }// сформирован список документов для первого слова
+    //std::cout << "Item 4 has been implemented\n";
+    wordList.clear();
+
+    // п.5 ищем соответствие след. слова списку документов
+    for(auto word : _list){
+        it = dict.find(word);
+        for(auto numDoc : docList){
+            bool is_cont = false;
+            for(auto el : it->second)
+                if(el.doc_id == numDoc) { is_cont = true; break;}
+            if(is_cont && std::count(wordList.begin(), wordList.end(), word) == 0) wordList.push_back(word);
         }
     }
-
-    std::vector <float> rank;
-    size_t maxRank = 0;
-    for(size_t i = 0; i < rankTableAbs.size(); ++i)
-                if(maxRank < rankTableAbs[i]) maxRank = rankTableAbs[i];
-
-    for(int i = 0; i < rank.size(); ++i)
-    {
-        relativeIndex[i].rank = rank[i]/(float)maxRank;
-        relativeIndex[i].doc_id = docList[i];
-    }
-    sortRelativeVector(relativeIndex);
-    if(relativeIndex.empty()) std::cout << "getRank: relativeIndex пуст\n";
-    return relativeIndex;
-}
-
-//Сортировка по релевантности от большей к меньшей
-void SearchServer::sortRelativeVector(std::vector<RelativeIndex> &vec){
-    RelativeIndex rlvInd{0,0.0};
-    for(int i= 0; i < vec.size(); ++i) {
-        for (int j = i; j < vec.size(); ++j) {
-            if (vec[j].rank > vec[i].rank) {
-                rlvInd.rank = vec[j].rank;
-                rlvInd.doc_id = vec[j].doc_id;
-                vec[j].rank = vec[i].rank;
-                vec[j].doc_id = vec[i].doc_id;
-                vec[i].rank = rlvInd.rank;
-                vec[i].doc_id = rlvInd.doc_id;
+    //---------------------------
+    for (int i = 1;i < wordList.size(); ++i){
+        std::vector<Entry> entry_vec;
+        it  = dict.find(wordList[i]);
+        if (it != dict.end()){
+            for(auto j : docList){
+                for(auto el : it->second){
+                    if((j == el.doc_id) && (el.count != 0))
+                        entry_vec.push_back({el.count, el.doc_id});
+                }
+            }
+            if(!entry_vec.empty()) {
+                d_Request.emplace(std::make_pair(wordList[i], entry_vec)); // здесь словарь слов в соответствии со списком по первому слову
+                entry_vec.clear();
             }
         }
     }
+    // проверили соответствие списка документов и слов запроса
+//    for(auto i : d_Request){
+//        std::cout << "Word: " << i.first << std::endl;
+//        for(auto j : i.second){
+//            std::cout << "--- docID: " << j.doc_id << ", count: " << j.count << "\n";
+//        }
+//        std::cout <<  "\n";
+//    }
+    //реализация п.7 методички
+    auto sum_abs_rank = [&d_Request](const size_t doc){
+        size_t sum = 0;
+        auto word = d_Request.begin();
+        while (word != d_Request.end()){
+            for(auto item : word->second){
+                if(item.doc_id == doc) {
+                    sum += item.count;
+                    break;
+                }
+            }
+            ++word;
+        }
+        return sum;
+    };
+//------------------
+    float maxRank = 0.0;
+    absoluteRanks.resize(docList.size());
+    for(int i = 0; i < docList.size(); ++i){
+        absoluteRanks[i] += sum_abs_rank(docList[i]);
+        maxRank += static_cast<float>(absoluteRanks[i]);
+    }
+    //std::cout << "founded maxRank = " << maxRank << "\n";//delete
+//-----------------
+    std::vector<RelativeIndex> relativeIndex;
+    float rank = 0.0;
+    for (size_t i = 0; i < docList.size(); ++i){
+        if(maxRank!=0.f) rank = static_cast<float>(absoluteRanks[i])/maxRank;
+        else rank= 0.f;
+        if(rank != 0.f) relativeIndex.push_back({docList[i], rank});
+    }
+
+    if(relativeIndex.empty()) {
+        //std::cout << "getRank: relativeIndex is empty\n";
+        return {};
+    }
+    sortRelativeVector(relativeIndex);
+    //std::cout << "Rank sort OK!\n";
+    return relativeIndex;
+} // getRank end.
+
+//------------------------------------
+// Сортировка по релевантности от большей к меньшей
+void SearchServer::sortRelativeVector(std::vector<RelativeIndex> &vec){//++
+    RelativeIndex rel;
+    for(int i = 0; i < vec.size()-1;++i) {
+        int mInd = i;
+        for (int j = i+1; j < vec.size();++j) if (vec[mInd].rank < vec[j].rank) mInd = j;
+        if(mInd != i){
+            rel = vec[i];
+            vec[i] = vec[mInd];
+            vec[mInd] = rel;
+        }
+    }
 }
 
-
+//---------- Создаём списки уникальных слов для одного входящего запроса --
+std::vector<std::string> SearchServer::U_WordList(std::vector<std::string> &wordList) {
+    std::vector<std::string> res(0);
+    for (auto &it : wordList ) { if (std::count(res.begin(), res.end(), it) == 0) res.push_back(it); }
+    res.shrink_to_fit();
+    return res;
+}

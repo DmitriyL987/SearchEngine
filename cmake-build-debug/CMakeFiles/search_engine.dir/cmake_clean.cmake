@@ -5,7 +5,6 @@ file(REMOVE_RECURSE
   "search_engine.exe"
   "search_engine.exe.manifest"
   "search_engine.pdb"
-  "search_engine[1]_tests.cmake"
 )
 
 # Per-language clean rules from dependency scanning.

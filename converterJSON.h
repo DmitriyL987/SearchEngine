@@ -23,7 +23,7 @@ class ConverterJSON {
 
     std::vector<std::string> listDocuments;
     std::vector<std::string> requests;
-    std::vector<std::vector<std::pair<int, float>>> answers;
+    //std::vector<std::vector<std::pair<int, float>>> answers;
 public:
     ConverterJSON(){
         init();

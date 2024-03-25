@@ -1,2 +1,4 @@
-    all    the transformation operations operate on the transformation worldtransform(). a matrix transforms a point in the plane to another point. for more information about the transformation matrix, see the coordinate system and qtransform documentation.
-the setworldtransform() function can replace or add to the currently set worldtransform(). самолёт самолёт самолёт
+"milk/ (milk)  "car" *horse* <milk> water linux"
+the transformation operations operate on the transformation worldtransform(). a matrix transforms a point in the plane to another point.
+for more information about the transformation matrix, see the coordinate system and qtransform documentation.
+the setworldtransform() function can replace or add to the currently set worldtransform().
