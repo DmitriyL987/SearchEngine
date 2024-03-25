@@ -1,1 +1,1 @@
--IE:/CLionProjects/search_engine/cmake-build-debug/_deps/json-src/include
+-IE:/CLionProjects/search_engine/cmake-build-debug/_deps/json-src/include -isystem E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include -isystem E:/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest
