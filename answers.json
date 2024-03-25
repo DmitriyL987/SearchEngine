@@ -1,0 +1,21 @@
+{"answers":[
+  {"requests001":[
+    {"result":"true"},
+    {"relevance":[
+      {"docId":"3","rank":"0.600000"},
+      {"docId":"1","rank":"0.400000"}]}]},
+  {"requests002":[
+    {"result":"true"},
+    {"docId":"1","rank":"1.000000"}]},
+  {"requests003":[
+    {"result":"false"}]},
+  {"requests004":[
+    {"result":"true"},
+    {"relevance":[
+      {"docId":"3","rank":"0.833333"},
+      {"docId":"2","rank":"0.166667"}]}]},
+  {"requests005":[
+    {"result":"true"},
+    {"relevance":[
+      {"docId":"0","rank":"0.800000"},
+      {"docId":"4","rank":"0.200000"}]}]}]}
