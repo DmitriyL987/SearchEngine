@@ -1,23 +1,22 @@
 #include <gtest/gtest.h>
 #include "converterJSON.h"
 #include "invertedIndex.hpp"
-#include <chrono>
 #include <iostream>
 #include "searchEngine.hpp"
 //std::mutex mutex;
+//#include <chrono>
 //void test(std::vector<std::vector<std::pair<int, float>>> preAnswer);
 
 
-//TEST(sample_test_case, sample_test)
-//{
-//    EXPECT_EQ(1, 1);
-//}
+TEST(sample_test_case, sample_test)
+{
+    EXPECT_EQ(1, 1);
+}
 
 void TestInvertedIndexFunctionaliti(
         std::vector<std::string> &docs,
         const std::vector<std::string> & requests,
-        const std::vector<std::vector<Entry>> & expected
-        ){
+        const std::vector<std::vector<Entry>> & expected) {
     std::vector<std::vector<Entry>> result;
     invertedIndex idx;
     idx.UpdateDocumentBase(docs);
@@ -27,6 +26,7 @@ void TestInvertedIndexFunctionaliti(
     }
     ASSERT_EQ(result, expected);
 }
+
 TEST(TestCaseInvertedIndex, TestBasic){
     std::vector<std::string> docs = {
             "london is the capital of great britain",
